@@ -53,6 +53,13 @@ public class VisualLevelEditorWindow
     [BoxGroup("Asset"), OnValueChanged("SaveCurrentLevel")]
     public int levelNumber;
     [BoxGroup("Asset/Buttons", ShowLabel = false), Button(ButtonSizes.Medium)]
+    void SaveAsset()
+    {
+        AssetDatabase.Refresh();
+        EditorUtility.SetDirty(currentLevel);
+        AssetDatabase.SaveAssets();
+    }
+    [BoxGroup("Asset/Buttons"), Button(ButtonSizes.Medium)]
     void NewLevel()
     {
         // Refresh all the levels
@@ -63,11 +70,10 @@ public class VisualLevelEditorWindow
         // Create and save a new level asset
         Level newLevel = ScriptableObject.CreateInstance<Level>();
         AssetDatabase.CreateAsset(newLevel, string.Format("Assets/Resources/Levels/{0}.asset", newLevelNumber.ToString()));
-        AssetDatabase.SaveAssets();
-
         newLevel.name = newLevelNumber.ToString();
         newLevel.level = newLevelNumber;
         EditorUtility.SetDirty(newLevel);
+        AssetDatabase.SaveAssets();
     }
 
     [BoxGroup("Settings", Order = 1)]
